@@ -1,0 +1,339 @@
+{
+  "author": "Refract",
+  "authorUrl": "https://refract.social",
+  "category": "social",
+  "cloudEndpoint": "https://mcp.refract.social",
+  "description": "Draft, approve and schedule social media posts from Claude, ChatGPT, Cursor and other AI apps.",
+  "homepage": "https://refract.social/mcp",
+  "icon": "https://refract.social/icon-512.png",
+  "identifier": "refract-social",
+  "name": "Refract",
+  "tags": [
+    "social-media",
+    "scheduling",
+    "publishing",
+    "marketing",
+    "content-calendar",
+    "approvals"
+  ],
+  "tools": [
+    {
+      "name": "list-workspaces",
+      "title": "List Workspaces",
+      "description": "Lists the Refract workspaces this connection can use, with each one's time zone and permissions. Call it first: each workspace is a brand or client with its own accounts, its \"workspace\" value goes into the other tools, and \"postsNeedApproval\" says whether posts you send wait for a teammate.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List Workspaces",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list-accounts",
+      "title": "List Accounts",
+      "description": "Lists the social accounts connected in a workspace. Use their \"id\" values to choose where a draft goes; \"needsReconnect\" marks accounts that can't post until someone reconnects them in Refract.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace"
+        ]
+      },
+      "annotations": {
+        "title": "List Accounts",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list-posts",
+      "title": "List Posts",
+      "description": "Lists a workspace's posts, newest first, with their status and scheduled time. Filter by status or by a date range in the workspace's time zone.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Only posts with this status, e.g. draft or scheduled.",
+            "enum": [
+              "draft",
+              "awaiting_approval",
+              "scheduled",
+              "publishing",
+              "published",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "from": {
+            "description": "Only posts scheduled on or after this day (YYYY-MM-DD).",
+            "format": "date",
+            "type": "string"
+          },
+          "to": {
+            "description": "Only posts scheduled on or before this day (YYYY-MM-DD).",
+            "format": "date",
+            "type": "string"
+          },
+          "limit": {
+            "description": "How many posts to return, from 1 to 50; 20 by default.",
+            "minimum": 1,
+            "maximum": 50,
+            "type": "integer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace"
+        ]
+      },
+      "annotations": {
+        "title": "List Posts",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get-post",
+      "title": "Get Post",
+      "description": "Gets one post with its text, accounts and their status, media, scheduled time and history. Per-platform texts and the media ids each platform leaves off are included where they differ.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The post's id (a UUID), from list-posts or create-draft.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Get Post",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "create-draft",
+      "title": "Create Draft",
+      "description": "Creates a draft post in a workspace with its text, accounts and optional media. Per platform it can take a different text and the network's post fields (a title, tags, a community); nothing goes out until the draft is scheduled or approved.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "text": {
+            "description": "The post's text, shared by every platform unless \"variants\" says otherwise.",
+            "type": "string"
+          },
+          "accounts": {
+            "description": "Ids of the accounts the post goes to, from list-accounts; at least one.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "media": {
+            "description": "Ids of images or videos from upload-media, in the order they appear in the post.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "variants": {
+            "description": "Per platform where it differs from the main post: its text, or {\"text\", \"settings\", \"skipped_media\"} to set the network's post fields too (leave out \"text\" to keep the main text), e.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\", \"tags\": [\"coffee\", \"guji\"]}}}. \"skipped_media\" lists ids from \"media\" that this platform leaves off, e.g. {\"x\": {\"skipped_media\": [\"<id of the fifth file>\"]}} when the network takes fewer files. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused.",
+            "type": "object"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "text",
+          "accounts"
+        ]
+      },
+      "annotations": {
+        "title": "Create Draft"
+      }
+    },
+    {
+      "name": "upload-media",
+      "title": "Upload Media",
+      "description": "Adds an image or video to a workspace's media library from a public link. Returns the media id to pass to create-draft.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "url": {
+            "description": "A public http or https link straight to the image or video file, e.g. https://example.com/photo.jpg.",
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Upload Media"
+      }
+    },
+    {
+      "name": "send-for-approval",
+      "title": "Send For Approval",
+      "description": "Sends a draft to the team for approval, to go out at a time you pick or at the workspace's next free posting time. Someone on the team approves it before it is published.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The draft's id (a UUID), from create-draft or list-posts.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "at": {
+            "description": "When it should go out once approved, in the workspace's time zone (e.g. \"2026-10-15 09:00\"). Leave out for the next free posting time.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Send For Approval"
+      }
+    },
+    {
+      "name": "schedule-post",
+      "title": "Schedule Post",
+      "description": "Schedules a draft to go out at a time you pick or at the workspace's next free posting time. When the workspace requires approval for AI tools, the draft is sent for approval instead; the answer's \"status\" says which.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The draft's id (a UUID), from create-draft or list-posts.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "at": {
+            "description": "When it goes out, in the workspace's time zone (e.g. \"2026-10-15 09:00\"). Leave out for the next free posting time.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Schedule Post"
+      }
+    },
+    {
+      "name": "edit-published-post",
+      "title": "Edit Published Post",
+      "description": "Changes the text and settings of a published post on one of its accounts. Works only where the network allows edits and within its time limit; when the workspace requires approval for AI tools, the edit waits for a teammate, and the answer's \"state\" says which (\"applying\" or \"approving\").",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The published post's id (a UUID), from list-posts.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "account": {
+            "description": "The id (a UUID) of the account to edit it on, from the post's \"accounts\" in get-post.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "text": {
+            "description": "The whole new text for that account; null for none, where the network takes a post without text (a title or media carry it).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "settings": {
+            "description": "Settings for networks that take them, as the API names them: title, tags (list), community_id, canonical_url, as_draft, post_as ({name, avatar_media_id}). Leave out to keep the current settings.",
+            "type": "object"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post",
+          "account",
+          "text"
+        ]
+      },
+      "annotations": {
+        "title": "Edit Published Post"
+      }
+    },
+    {
+      "name": "remove-published-post",
+      "title": "Remove Published Post",
+      "description": "Removes a published post from the network of one of its accounts. Ask the person before you call this: it only works where the network lets apps remove posts, the post stays in Refract marked removed, and its other accounts keep it.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The published post's id (a UUID), from list-posts.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "account": {
+            "description": "The id (a UUID) of the account to remove it from, from the post's \"accounts\" in get-post.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post",
+          "account"
+        ]
+      },
+      "annotations": {
+        "title": "Remove Published Post",
+        "destructiveHint": true
+      }
+    }
+  ],
+  "version": "1.0.0"
+}

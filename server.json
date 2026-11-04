@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "social.refract/refract",
+  "title": "Refract",
+  "description": "Draft, approve and schedule social media posts from Claude, ChatGPT, Cursor and other AI apps.",
+  "version": "1.0.0",
+  "websiteUrl": "https://refract.social/mcp",
+  "icons": [
+    {
+      "src": "https://refract.social/icon-512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    },
+    {
+      "src": "https://refract.social/favicon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.refract.social"
+    }
+  ]
+}
