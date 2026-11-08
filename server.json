@@ -3,8 +3,12 @@
   "name": "social.refract/refract",
   "title": "Refract",
   "description": "Draft, approve and schedule social media posts from Claude, ChatGPT, Cursor and other AI apps.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "websiteUrl": "https://refract.social/mcp",
+  "repository": {
+    "url": "https://github.com/anpsthemes-wp-themes/refract-mcp",
+    "source": "github"
+  },
   "icons": [
     {
       "src": "https://refract.social/icon-512.png",
