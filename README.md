@@ -66,10 +66,10 @@ Add a remote MCP server (Streamable HTTP) with the address above. Refract signs 
 
 When you connect an app you pick its workspaces and one of two levels:
 
-| Level                       | Works like    |                                                                        |
-| --------------------------- | ------------- | ---------------------------------------------------------------------- |
-| Draft and send for approval | a Contributor | Reads, writes drafts, adds files and sends posts for approval          |
-| Schedule and publish        | an Editor     | All of that, schedules posts, and edits or removes posts that went out |
+| Level                       | Works like    |                                                                                                               |
+| --------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------- |
+| Draft and send for approval | a Contributor | Reads, writes drafts, adds files and sends posts for approval                                                 |
+| Schedule and publish        | an Editor     | All of that, schedules or publishes posts, sends failed posts again, and edits or removes posts that went out |
 
 A connection never does more than your own role allows, and only sees the workspaces it was given. Tools it isn't
 allowed are not offered to the app at all. Where a workspace asks for approval from AI agents, everything an app
@@ -78,18 +78,27 @@ and can remove it at any time.
 
 ## Tools
 
-| Tool                    | What it does                                                                                                     | Level            |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `list-workspaces`       | The workspaces this connection can reach, with their time zone and whether agent posts need approval             | Any              |
-| `list-accounts`         | A workspace's connected social accounts: id, platform, name, handle and health                                   | Any              |
-| `list-posts`            | A workspace's posts, filtered by status and a date range, newest first (at most 50)                              | Any              |
-| `get-post`              | One post: text, per-platform text, accounts, files, status, time and history                                     | Any              |
-| `create-draft`          | Creates a draft with text, accounts and files, and per network a different text and post fields                  | Draft or Publish |
-| `upload-media`          | Adds an image or video to the workspace's media library from a public https link                                 | Draft or Publish |
-| `send-for-approval`     | Sends a draft for approval at a time, or at the next free posting time                                           | Draft or Publish |
-| `schedule-post`         | Schedules a draft at a time or the next free posting time; becomes an approval request where the workspace asks  | Publish          |
-| `edit-published-post`   | Edits a post that already went out, on one of its accounts, where the network allows edits                       | Publish          |
-| `remove-published-post` | Removes a post that already went out from one of its accounts, where the network lets apps remove posts          | Publish          |
+| Tool                    | What it does                                                                                                              | Level            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `list-workspaces`       | The workspaces this connection can reach, with their time zone and whether agent posts need approval                      | Any              |
+| `list-accounts`         | A workspace's connected social accounts: id, platform, name, handle and health                                            | Any              |
+| `list-posts`            | A workspace's posts, filtered by status and a date range, newest first (at most 50), with any waiting approval            | Any              |
+| `get-post`              | One post: text, per-platform text, accounts, files, status, time, history, why an account failed and any waiting approval | Any              |
+| `read-analytics`        | A workspace's numbers for a period: totals, each network, the best posts and what data is missing                         | Any              |
+| `check-post`            | Runs the composer's checks on a saved post and lists its issues per network                                               | Any              |
+| `find-slots`            | The next free posting times for some accounts, up to 10                                                                   | Any              |
+| `create-draft`          | Creates a draft with text, accounts and files, and per network a different text and post fields                           | Draft or Publish |
+| `update-draft`          | Changes a post that hasn't gone out; only what you pass changes, and a scheduled post keeps its time                      | Draft or Publish |
+| `upload-media`          | Adds an image or video to the workspace's media library from a public https link                                          | Draft or Publish |
+| `send-for-approval`     | Sends a draft for approval at a time, or at the next free posting time                                                    | Draft or Publish |
+| `delete-draft`          | Deletes a draft, or a post waiting for approval with its request                                                          | Draft or Publish |
+| `schedule-post`         | Schedules a draft at a time or the next free posting time; becomes an approval request where the workspace asks           | Publish          |
+| `publish-now`           | Publishes a draft or a scheduled post now, on every account it goes to; it can't be undone                                | Publish          |
+| `reschedule-post`       | Moves a scheduled post, or one waiting for approval, to a new time                                                        | Publish          |
+| `unschedule-post`       | Takes a scheduled post, or one waiting for approval, back to the drafts                                                   | Publish          |
+| `retry-post`            | Sends a failed post again to one account where it failed, fixing its files first when needed                              | Publish          |
+| `edit-published-post`   | Edits a post that already went out, on one of its accounts, where the network allows edits                                | Publish          |
+| `remove-published-post` | Removes a post that already went out from one of its accounts, where the network lets apps remove posts                   | Publish          |
 
 Posts made through MCP show their source as `mcp` in the API and in Refract.
 

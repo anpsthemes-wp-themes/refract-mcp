@@ -54,7 +54,7 @@
     {
       "name": "list-posts",
       "title": "List Posts",
-      "description": "Lists a workspace's posts, newest first, with their status and scheduled time. Filter by status or by a date range in the workspace's time zone.",
+      "description": "Lists a workspace's posts, newest first, with their status and scheduled time. Filter by status or by a date range in the workspace's time zone. A post waiting for approval comes with its \"approval\": its id, who asked, when it would go out and whether a client decides it. Texts are cut at 280 characters (get-post has the whole post) and come inside <untrusted> tags.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -103,7 +103,7 @@
     {
       "name": "get-post",
       "title": "Get Post",
-      "description": "Gets one post with its text, accounts and their status, media, scheduled time and history. Per-platform texts and the media ids each platform leaves off are included where they differ.",
+      "description": "Gets one post with its text, accounts and their status, media, scheduled time and history. Per-platform texts and the media ids each platform leaves off are included where they differ. An account that failed comes with its \"failure\": what went wrong, in plain words, and the \"fix\" it offers (retry, shrink_and_retry, crop_and_retry, reconnect, edit_post or none). A post waiting for approval comes with its \"approval\": its id, who asked, when it would go out and whether a client decides it. Text people or networks wrote comes inside <untrusted> tags.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -124,6 +124,147 @@
       },
       "annotations": {
         "title": "Get Post",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "check-post",
+      "title": "Check Post",
+      "description": "Runs the composer's checks on a saved post and lists its issues per platform, each with a sentence. Severity \"block\" stops the post from being scheduled; \"warn\" and \"info\" are worth a look. Use it before scheduling a long post, a post with media, or one for several networks.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The post's id (a UUID), from create-draft or list-posts.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Check Post",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "read-analytics",
+      "title": "Read Analytics",
+      "description": "Reads a workspace's analytics for a period: totals against the period before, each network's numbers, the best posts and gaps. The best posts are the top 5 by views and by engagement rate; gaps are plain sentences about missing data. Use range 7d, 30d or 90d (30d by default), or from and to for exact days within the plan's history. A number a network doesn't report is null, not zero: say it isn't reported, never that it is 0. Engagement rate is engagements divided by views (0.042 is 4.2%). Post texts are cut at 200 characters and come inside <untrusted> tags. link opens the analytics page for the same period.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "range": {
+            "description": "The last 7, 30 or 90 days up to today; 30d by default. Leave out when you give from and to.",
+            "enum": [
+              "7d",
+              "30d",
+              "90d"
+            ],
+            "type": "string"
+          },
+          "from": {
+            "description": "The first day of an exact period (YYYY-MM-DD), in the workspace's time zone. Give to as well. Days before the plan's analytics history are refused with the earliest day allowed.",
+            "format": "date",
+            "type": "string"
+          },
+          "to": {
+            "description": "The last day of an exact period (YYYY-MM-DD), today or earlier. Give from as well.",
+            "format": "date",
+            "type": "string"
+          },
+          "platforms": {
+            "description": "Only these networks, e.g. [\"instagram\", \"linkedin\"]. Leave out for every network.",
+            "items": {
+              "enum": [
+                "instagram",
+                "facebook",
+                "threads",
+                "tiktok",
+                "youtube",
+                "linkedin",
+                "x",
+                "pinterest",
+                "bluesky",
+                "mastodon",
+                "telegram",
+                "google_business",
+                "wordpress",
+                "discord",
+                "tumblr",
+                "slack",
+                "pixelfed",
+                "lemmy",
+                "dev"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "accounts": {
+            "description": "Only these accounts: ids from list-accounts. Leave out for every account.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace"
+        ]
+      },
+      "annotations": {
+        "title": "Read Analytics",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "find-slots",
+      "title": "Find Slots",
+      "description": "Finds the next free posting times for some accounts: the workspace's posting times (its queue) that none of them uses yet, in the workspace's time zone. schedule-post without \"at\" takes the first one.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "accounts": {
+            "description": "Ids of the accounts the post would go to, from list-accounts; a time is free when none of them has a post then.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "count": {
+            "description": "How many free times to return, from 1 to 10; 3 by default.",
+            "minimum": 1,
+            "maximum": 10,
+            "type": "integer"
+          },
+          "after": {
+            "description": "Only times after this, in the workspace's time zone (e.g. \"2026-10-19 00:00\" for next Monday on). Leave out to start from now.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "accounts"
+        ]
+      },
+      "annotations": {
+        "title": "Find Slots",
         "readOnlyHint": true
       }
     },
@@ -169,6 +310,54 @@
       },
       "annotations": {
         "title": "Create Draft"
+      }
+    },
+    {
+      "name": "update-draft",
+      "title": "Update Draft",
+      "description": "Changes a post that hasn't gone out yet: its text, its text and post fields per platform, its accounts or its media. Works on drafts, scheduled posts and posts waiting for approval; only what you pass changes, and a scheduled post keeps its time. Use it to edit a post instead of creating a new draft.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The post's id (a UUID), from create-draft or list-posts.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "text": {
+            "description": "The whole new main text, shared by every platform without its own. Leave out to keep it.",
+            "type": "string"
+          },
+          "accounts": {
+            "description": "Ids of all the accounts the post goes to from now on, from list-accounts; at least one. Leave out to keep them.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "media": {
+            "description": "Ids of all the images or videos in the post from now on, in order (from get-post or upload-media); [] removes them all. Leave out to keep them.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "variants": {
+            "description": "Only the platforms whose own version changes: a text replaces that platform's text; {\"text\", \"settings\", \"skipped_media\"} replaces only the keys you pass (\"text\": null uses the main text again, \"settings\" changes only the fields you name); null drops the platform's own text and post fields. E.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\"}}, \"linkedin\": null}. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused.",
+            "type": "object"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Update Draft"
       }
     },
     {
@@ -258,6 +447,116 @@
       }
     },
     {
+      "name": "publish-now",
+      "title": "Publish Now",
+      "description": "Publishes a draft or a scheduled post now, on every account it goes to. It can't be undone: ask the person first. When the workspace requires approval for AI tools, the post is sent for approval instead; the answer's \"status\" says which.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The post's id (a UUID), from create-draft or list-posts.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Publish Now"
+      }
+    },
+    {
+      "name": "reschedule-post",
+      "title": "Reschedule Post",
+      "description": "Moves a scheduled post, or one waiting for approval, to a new time in the workspace's time zone. A post waiting for approval keeps waiting, for the new time; for a draft, use schedule-post.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The scheduled post's id (a UUID), from list-posts.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "at": {
+            "description": "The new time, in the workspace's time zone (e.g. \"2026-10-15 09:00\"); it must be in the future.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post",
+          "at"
+        ]
+      },
+      "annotations": {
+        "title": "Reschedule Post"
+      }
+    },
+    {
+      "name": "unschedule-post",
+      "title": "Unschedule Post",
+      "description": "Takes a scheduled post, or one waiting for approval, off the schedule and back to the drafts. It keeps its text, accounts and media; a waiting approval request is withdrawn.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The scheduled post's id (a UUID), from list-posts.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Unschedule Post"
+      }
+    },
+    {
+      "name": "delete-draft",
+      "title": "Delete Draft",
+      "description": "Deletes a draft, or a post waiting for approval (its approval request goes too). A scheduled post must be taken off the schedule first with unschedule-post; posts that went out can't be deleted here.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The draft's id (a UUID), from create-draft or list-posts.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Delete Draft",
+        "destructiveHint": true
+      }
+    },
+    {
       "name": "edit-published-post",
       "title": "Edit Published Post",
       "description": "Changes the text and settings of a published post on one of its accounts. Works only where the network allows edits and within its time limit; when the workspace requires approval for AI tools, the edit waits for a teammate, and the answer's \"state\" says which (\"applying\" or \"approving\").",
@@ -333,7 +632,39 @@
         "title": "Remove Published Post",
         "destructiveHint": true
       }
+    },
+    {
+      "name": "retry-post",
+      "title": "Retry Post",
+      "description": "Sends a post again to one account where it failed, and only that account. get-post shows each failed account's \"failure\": when its fix is shrink_and_retry or crop_and_retry, the files are fixed first; otherwise it's sent as it is, so change the text or settings with update-draft first when the failure is about them. It publishes at once and can't be undone: ask the person first. A signed-out account must be reconnected in Refract first.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The post's id (a UUID), from list-posts or get-post.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "account": {
+            "description": "The id of the account where it failed, from get-post.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post",
+          "account"
+        ]
+      },
+      "annotations": {
+        "title": "Retry Post"
+      }
     }
   ],
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
