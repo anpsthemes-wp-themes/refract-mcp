@@ -1,5 +1,7 @@
 # Refract MCP server
 
+[![mcptry](https://mcptry.com/badge/social.refract/refract)](https://mcptry.com/servers/social.refract/refract)
+
 [Refract](https://refract.social) is a social media publishing app. Its remote MCP server lets AI apps such as Claude,
 ChatGPT, Cursor and VS Code draft, approve and schedule posts for you.
 
