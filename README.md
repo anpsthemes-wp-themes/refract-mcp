@@ -83,7 +83,7 @@ and can remove it at any time.
 | Tool                    | What it does                                                                                                              | Level            |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `list-workspaces`       | The workspaces this connection can reach, with their time zone and whether agent posts need approval                      | Any              |
-| `list-accounts`         | A workspace's connected social accounts: id, platform, name, handle and health                                            | Any              |
+| `list-accounts`         | A workspace's connected social accounts: id, platform, name, handle, health and TikTok's choices for who can view         | Any              |
 | `list-posts`            | A workspace's posts, filtered by status and a date range, newest first (at most 50), with any waiting approval            | Any              |
 | `get-post`              | One post: text, per-platform text, accounts, files, status, time, history, why an account failed and any waiting approval | Any              |
 | `read-analytics`        | A workspace's numbers for a period: totals, each network, the best posts and what data is missing                         | Any              |
