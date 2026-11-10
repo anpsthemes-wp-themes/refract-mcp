@@ -27,6 +27,8 @@ own.
 2. In Claude, add a custom connector named Refract with the address above.
 3. Select Connect, then sign in to Refract if it asks.
 4. Check the workspaces and what Claude can do, then select Allow.
+5. To let Claude upload files you attach in the chat, open **Settings › Capabilities** in Claude, turn on **Allow network
+   egress** and add `mcp.refract.social` to **Additional allowed domains**.
 
 ### ChatGPT
 
@@ -89,7 +91,8 @@ and can remove it at any time.
 | `find-slots`            | The next free posting times for some accounts, up to 10                                                                   | Any              |
 | `create-draft`          | Creates a draft with text, accounts and files, and per network a different text and post fields                           | Draft or Publish |
 | `update-draft`          | Changes a post that hasn't gone out; only what you pass changes, and a scheduled post keeps its time                      | Draft or Publish |
-| `upload-media`          | Adds an image or video to the workspace's media library from a public https link                                          | Draft or Publish |
+| `upload-media`          | Adds an image or video to the workspace's media library from a public https link or a file attached in ChatGPT            | Draft or Publish |
+| `request-media-upload`  | A one-time link to upload an image or video from the app's computer or code sandbox, e.g. a file attached in chat         | Draft or Publish |
 | `send-for-approval`     | Sends a draft for approval at a time, or at the next free posting time                                                    | Draft or Publish |
 | `delete-draft`          | Deletes a draft, or a post waiting for approval with its request                                                          | Draft or Publish |
 | `schedule-post`         | Schedules a draft at a time or the next free posting time; becomes an approval request where the workspace asks           | Publish          |

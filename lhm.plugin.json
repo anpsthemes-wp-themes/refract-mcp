@@ -290,14 +290,14 @@
             "type": "array"
           },
           "media": {
-            "description": "Ids of images or videos from upload-media, in the order they appear in the post.",
+            "description": "Ids of images or videos from upload-media or request-media-upload, in the order they appear in the post.",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "variants": {
-            "description": "Per platform where it differs from the main post: its text, or {\"text\", \"settings\", \"skipped_media\"} to set the network's post fields too (leave out \"text\" to keep the main text), e.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\", \"tags\": [\"coffee\", \"guji\"]}}}. \"skipped_media\" lists ids from \"media\" that this platform leaves off, e.g. {\"x\": {\"skipped_media\": [\"<id of the fifth file>\"]}} when the network takes fewer files. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused.",
+            "description": "Per platform where it differs from the main post: its text, or {\"text\", \"settings\", \"skipped_media\"} to set the network's post fields too (leave out \"text\" to keep the main text), e.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\", \"tags\": [\"coffee\", \"guji\"]}}}. \"skipped_media\" lists ids from \"media\" that this platform leaves off, e.g. {\"x\": {\"skipped_media\": [\"<id of the fifth file>\"]}} when the network takes fewer files. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media or request-media-upload. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused.",
             "type": "object"
           }
         },
@@ -339,14 +339,14 @@
             "type": "array"
           },
           "media": {
-            "description": "Ids of all the images or videos in the post from now on, in order (from get-post or upload-media); [] removes them all. Leave out to keep them.",
+            "description": "Ids of all the images or videos in the post from now on, in order (from get-post, upload-media or request-media-upload); [] removes them all. Leave out to keep them.",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "variants": {
-            "description": "Only the platforms whose own version changes: a text replaces that platform's text; {\"text\", \"settings\", \"skipped_media\"} replaces only the keys you pass (\"text\": null uses the main text again, \"settings\" changes only the fields you name); null drops the platform's own text and post fields. E.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\"}}, \"linkedin\": null}. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused.",
+            "description": "Only the platforms whose own version changes: a text replaces that platform's text; {\"text\", \"settings\", \"skipped_media\"} replaces only the keys you pass (\"text\": null uses the main text again, \"settings\" changes only the fields you name); null drops the platform's own text and post fields. E.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\"}}, \"linkedin\": null}. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media or request-media-upload. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused.",
             "type": "object"
           }
         },
@@ -363,7 +363,7 @@
     {
       "name": "upload-media",
       "title": "Upload Media",
-      "description": "Adds an image or video to a workspace's media library from a public link. Returns the media id to pass to create-draft.",
+      "description": "Adds an image or video to a workspace's media library from a public link, or from a file the person attached in ChatGPT. Returns the media id to pass to create-draft or update-draft. For a file on disk or in your code sandbox, use request-media-upload instead.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -371,19 +371,65 @@
             "type": "string"
           },
           "url": {
-            "description": "A public http or https link straight to the image or video file, e.g. https://example.com/photo.jpg.",
+            "description": "A public http or https link straight to the image or video file, e.g. https://example.com/photo.jpg. Leave out when you pass \"file\".",
             "format": "uri",
+            "type": "string"
+          },
+          "file": {
+            "description": "A file the person attached in the chat, in apps that pass attached files to tools (ChatGPT). Leave out when you pass \"url\".",
+            "additionalProperties": false,
+            "properties": {
+              "download_url": {
+                "description": "Where Refract downloads the file from.",
+                "type": "string"
+              },
+              "file_id": {
+                "description": "The file's id in the app it was attached in.",
+                "type": "string"
+              },
+              "mime_type": {
+                "description": "The file's type, e.g. image/jpeg.",
+                "type": "string"
+              },
+              "file_name": {
+                "description": "The file's name, e.g. photo.jpg.",
+                "type": "string"
+              }
+            },
+            "type": "object",
+            "required": [
+              "download_url",
+              "file_id"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace"
+        ]
+      },
+      "annotations": {
+        "title": "Upload Media"
+      }
+    },
+    {
+      "name": "request-media-upload",
+      "title": "Request Media Upload",
+      "description": "Gives a one-time link for uploading an image or video from your disk or code sandbox, such as a file the person attached in the chat. Run the returned curl command with the file's real path; its JSON answer has the media id to pass to create-draft or update-draft. The link stores one file and works for 15 minutes; a file Refract refuses doesn't use it up. For a file at a public link, use upload-media instead.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
             "type": "string"
           }
         },
         "type": "object",
         "required": [
-          "workspace",
-          "url"
+          "workspace"
         ]
       },
       "annotations": {
-        "title": "Upload Media"
+        "title": "Request Media Upload"
       }
     },
     {
@@ -666,5 +712,5 @@
       }
     }
   ],
-  "version": "1.1.0"
+  "version": "1.2.0"
 }
