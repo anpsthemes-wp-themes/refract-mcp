@@ -309,7 +309,8 @@
         ]
       },
       "annotations": {
-        "title": "Create Draft"
+        "title": "Create Draft",
+        "destructiveHint": false
       }
     },
     {
@@ -357,7 +358,8 @@
         ]
       },
       "annotations": {
-        "title": "Update Draft"
+        "title": "Update Draft",
+        "destructiveHint": true
       }
     },
     {
@@ -409,7 +411,8 @@
         ]
       },
       "annotations": {
-        "title": "Upload Media"
+        "title": "Upload Media",
+        "destructiveHint": false
       }
     },
     {
@@ -429,7 +432,8 @@
         ]
       },
       "annotations": {
-        "title": "Request Media Upload"
+        "title": "Request Media Upload",
+        "destructiveHint": false
       }
     },
     {
@@ -459,7 +463,8 @@
         ]
       },
       "annotations": {
-        "title": "Send For Approval"
+        "title": "Send For Approval",
+        "destructiveHint": true
       }
     },
     {
@@ -489,7 +494,8 @@
         ]
       },
       "annotations": {
-        "title": "Schedule Post"
+        "title": "Schedule Post",
+        "destructiveHint": true
       }
     },
     {
@@ -515,7 +521,8 @@
         ]
       },
       "annotations": {
-        "title": "Publish Now"
+        "title": "Publish Now",
+        "destructiveHint": true
       }
     },
     {
@@ -546,7 +553,8 @@
         ]
       },
       "annotations": {
-        "title": "Reschedule Post"
+        "title": "Reschedule Post",
+        "destructiveHint": true
       }
     },
     {
@@ -572,7 +580,8 @@
         ]
       },
       "annotations": {
-        "title": "Unschedule Post"
+        "title": "Unschedule Post",
+        "destructiveHint": true
       }
     },
     {
@@ -643,7 +652,8 @@
         ]
       },
       "annotations": {
-        "title": "Edit Published Post"
+        "title": "Edit Published Post",
+        "destructiveHint": true
       }
     },
     {
@@ -708,7 +718,8 @@
         ]
       },
       "annotations": {
-        "title": "Retry Post"
+        "title": "Retry Post",
+        "destructiveHint": true
       }
     }
   ],

@@ -103,7 +103,8 @@ and can remove it at any time.
 | `edit-published-post`   | Edits a post that already went out, on one of its accounts, where the network allows edits                                | Publish          |
 | `remove-published-post` | Removes a post that already went out from one of its accounts, where the network lets apps remove posts                   | Publish          |
 
-Posts made through MCP show their source as `mcp` in the API and in Refract.
+Posts made through MCP have `"source": "mcp"` in the API and in `get-post` and `list-posts`. In Refract they show who
+connected the app, as **Created by** that person.
 
 ## About this repository
 
