@@ -297,7 +297,7 @@
             "type": "array"
           },
           "variants": {
-            "description": "Per platform where it differs from the main post: its text, or {\"text\", \"settings\", \"skipped_media\"} to set the network's post fields too (leave out \"text\" to keep the main text), e.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\", \"tags\": [\"coffee\", \"guji\"]}}}. \"skipped_media\" lists ids from \"media\" that this platform leaves off, e.g. {\"x\": {\"skipped_media\": [\"<id of the fifth file>\"]}} when the network takes fewer files. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media or request-media-upload. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused. TikTok needs \"privacy_level\" in its settings before it can be scheduled: who can view the post, one of its account's privacyLevelOptions from list-accounts (PUBLIC_TO_EVERYONE is Everyone, MUTUAL_FOLLOW_FRIENDS is Friends, FOLLOWER_OF_CREATOR is Followers, SELF_ONLY is Only me). TikTok requires the person to pick it: ask them who can view the post and pass their answer, e.g. {\"tiktok\": {\"settings\": {\"privacy_level\": \"PUBLIC_TO_EVERYONE\"}}}. Never choose it for them.",
+            "description": "Per platform where it differs from the main post: its text, or {\"text\", \"settings\", \"skipped_media\"} to set the network's post fields too (leave out \"text\" to keep the main text), e.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\", \"tags\": [\"coffee\", \"guji\"]}}}. \"skipped_media\" lists ids from \"media\" that this platform leaves off, e.g. {\"x\": {\"skipped_media\": [\"<id of the fifth file>\"]}} when the network takes fewer files. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress, discord, tumblr, slack, pixelfed, lemmy, dev. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags; discord: post_as; tumblr: title, tags, as_draft; lemmy: title, community_id; dev: title, tags, canonical_url, as_draft. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media or request-media-upload. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused. TikTok needs \"privacy_level\" in its settings before it can be scheduled: who can view the post, one of its account's privacyLevelOptions from list-accounts (PUBLIC_TO_EVERYONE is Everyone, MUTUAL_FOLLOW_FRIENDS is Friends, FOLLOWER_OF_CREATOR is Followers, SELF_ONLY is Only me). TikTok requires the person to pick it: ask them who can view the post and pass their answer, e.g. {\"tiktok\": {\"settings\": {\"privacy_level\": \"PUBLIC_TO_EVERYONE\"}}}. Never choose it for them.",
             "type": "object"
           }
         },
@@ -316,7 +316,7 @@
     {
       "name": "update-draft",
       "title": "Update Draft",
-      "description": "Changes a post that hasn't gone out yet: its text, its text and post fields per platform, its accounts or its media. Works on drafts, scheduled posts and posts waiting for approval; only what you pass changes, and a scheduled post keeps its time. Use it to edit a post instead of creating a new draft.",
+      "description": "Changes a post that hasn't gone out yet: its text, its text and post fields per platform, its accounts or its media. Works on drafts, scheduled posts, posts waiting for approval and failed posts; only what you pass changes, and a scheduled post keeps its time. A change to a post someone asked to approve or approved waits for a person to confirm it before it goes out; the answer's \"status\" and \"message\" say so. A scheduled post about to go out is refused with how to change it instead. Use it to edit a post instead of creating a new draft.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -347,7 +347,7 @@
             "type": "array"
           },
           "variants": {
-            "description": "Only the platforms whose own version changes: a text replaces that platform's text; {\"text\", \"settings\", \"skipped_media\"} replaces only the keys you pass (\"text\": null uses the main text again, \"settings\" changes only the fields you name); null drops the platform's own text and post fields. E.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\"}}, \"linkedin\": null}. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media or request-media-upload. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused. TikTok needs \"privacy_level\" in its settings before it can be scheduled: who can view the post, one of its account's privacyLevelOptions from list-accounts (PUBLIC_TO_EVERYONE is Everyone, MUTUAL_FOLLOW_FRIENDS is Friends, FOLLOWER_OF_CREATOR is Followers, SELF_ONLY is Only me). TikTok requires the person to pick it: ask them who can view the post and pass their answer, e.g. {\"tiktok\": {\"settings\": {\"privacy_level\": \"PUBLIC_TO_EVERYONE\"}}}. Never choose it for them.",
+            "description": "Only the platforms whose own version changes: a text replaces that platform's text; {\"text\", \"settings\", \"skipped_media\"} replaces only the keys you pass (\"text\": null uses the main text again, \"settings\" changes only the fields you name); null drops the platform's own text and post fields. E.g. {\"x\": \"Shorter text for X\", \"youtube\": {\"settings\": {\"title\": \"Cupping at Kolo\"}}, \"linkedin\": null}. Keys: instagram, facebook, threads, tiktok, youtube, linkedin, x, pinterest, bluesky, mastodon, telegram, google_business, wordpress, discord, tumblr, slack, pixelfed, lemmy, dev. Post fields each platform takes: youtube: title, tags; pinterest: title; wordpress: title, tags; discord: post_as; tumblr: title, tags, as_draft; lemmy: title, community_id; dev: title, tags, canonical_url, as_draft. tags is a list, as_draft is true or false, post_as is {\"name\", \"avatar_media_id\"} with a picture from upload-media or request-media-upload. Some networks need a field, such as a title, before the post can be scheduled; a field a network doesn't take is refused. TikTok needs \"privacy_level\" in its settings before it can be scheduled: who can view the post, one of its account's privacyLevelOptions from list-accounts (PUBLIC_TO_EVERYONE is Everyone, MUTUAL_FOLLOW_FRIENDS is Friends, FOLLOWER_OF_CREATOR is Followers, SELF_ONLY is Only me). TikTok requires the person to pick it: ask them who can view the post and pass their answer, e.g. {\"tiktok\": {\"settings\": {\"privacy_level\": \"PUBLIC_TO_EVERYONE\"}}}. Never choose it for them.",
             "type": "object"
           }
         },
@@ -470,7 +470,7 @@
     {
       "name": "schedule-post",
       "title": "Schedule Post",
-      "description": "Schedules a draft to go out at a time you pick or at the workspace's next free posting time. When the workspace requires approval for AI tools, the draft is sent for approval instead; the answer's \"status\" says which.",
+      "description": "Schedules a draft to go out at a time you pick or at the workspace's next free posting time. When the workspace requires approval for AI tools, the draft is sent for approval instead; the answer's \"status\" says which. The answer's \"at\" is when it goes out: a few minutes later than asked when the time is too soon for the person to still take it back.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -501,7 +501,7 @@
     {
       "name": "publish-now",
       "title": "Publish Now",
-      "description": "Publishes a draft or a scheduled post now, on every account it goes to. It can't be undone: ask the person first. When the workspace requires approval for AI tools, the post is sent for approval instead; the answer's \"status\" says which.",
+      "description": "Publishes a draft or a scheduled post on every account it goes to, as soon as it can. Ask the person first: once out, it can't be undone. When the workspace requires approval for AI tools, the post is sent for approval instead; otherwise it may wait a few minutes on the schedule first, so the person can still stop it. The answer's \"status\", \"at\" and \"message\" say what happened: pass the message on to the person.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -528,7 +528,7 @@
     {
       "name": "reschedule-post",
       "title": "Reschedule Post",
-      "description": "Moves a scheduled post, or one waiting for approval, to a new time in the workspace's time zone. A post waiting for approval keeps waiting, for the new time; for a draft, use schedule-post.",
+      "description": "Moves a scheduled post, or one waiting for approval, to a new time in the workspace's time zone. A post waiting for approval keeps waiting, for the new time; for a draft, use schedule-post. The answer's \"at\" is when it goes out: a few minutes later than asked when the time is too soon for the person to still take it back.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -612,6 +612,33 @@
       }
     },
     {
+      "name": "restore-draft",
+      "title": "Restore Draft",
+      "description": "Brings back a draft deleted in the last 30 days, with delete-draft or in Refract. A post that waited for approval comes back as a draft, since its approval request was deleted with it.",
+      "inputSchema": {
+        "properties": {
+          "workspace": {
+            "description": "The workspace's \"workspace\" value (its slug) from list-workspaces; its id works too.",
+            "type": "string"
+          },
+          "post": {
+            "description": "The deleted draft's id (a UUID), from delete-draft's answer.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace",
+          "post"
+        ]
+      },
+      "annotations": {
+        "title": "Restore Draft",
+        "destructiveHint": false
+      }
+    },
+    {
       "name": "edit-published-post",
       "title": "Edit Published Post",
       "description": "Changes the text and settings of a published post on one of its accounts. Works only where the network allows edits and within its time limit; when the workspace requires approval for AI tools, the edit waits for a teammate, and the answer's \"state\" says which (\"applying\" or \"approving\").",
@@ -692,7 +719,7 @@
     {
       "name": "retry-post",
       "title": "Retry Post",
-      "description": "Sends a post again to one account where it failed, and only that account. get-post shows each failed account's \"failure\": when its fix is shrink_and_retry or crop_and_retry, the files are fixed first; otherwise it's sent as it is, so change the text or settings with update-draft first when the failure is about them. It publishes at once and can't be undone: ask the person first. A signed-out account must be reconnected in Refract first.",
+      "description": "Sends a post again to one account where it failed, and only that account. get-post shows each failed account's \"failure\": when its fix is shrink_and_retry or crop_and_retry, the files are fixed first; otherwise it's sent as it is, so change the text or settings with update-draft first when the failure is about them, and when update-draft says the post went back to the drafts, send it with publish-now or schedule-post instead. It publishes at once and can't be undone: ask the person first. A signed-out account must be reconnected in Refract first.",
       "inputSchema": {
         "properties": {
           "workspace": {
@@ -723,5 +750,5 @@
       }
     }
   ],
-  "version": "1.2.0"
+  "version": "1.4.0"
 }

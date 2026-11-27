@@ -78,6 +78,12 @@ allowed are not offered to the app at all. Where a workspace asks for approval f
 schedules waits for approval, just like a teammate's post. Admins see every connection in **Settings › API and agents**
 and can remove it at any time.
 
+**Schedule and publish** lasts 1, 7 or 30 days, or until you change it; after that the connection drafts and sends for
+approval. Nothing an app schedules goes out sooner than 5 minutes after it asked, so you can still stop it. An app never
+approves a post: a change it makes to a post someone asked to approve, or approved, waits for a person to confirm it.
+See [Time to stop a post](https://refract.social/docs/mcp#time-to-stop-a-post) and
+[Confirm changes](https://refract.social/docs/mcp#confirm-changes).
+
 ## Tools
 
 | Tool                    | What it does                                                                                                              | Level            |
@@ -95,9 +101,10 @@ and can remove it at any time.
 | `request-media-upload`  | A one-time link to upload an image or video from the app's computer or code sandbox, e.g. a file attached in chat         | Draft or Publish |
 | `send-for-approval`     | Sends a draft for approval at a time, or at the next free posting time                                                    | Draft or Publish |
 | `delete-draft`          | Deletes a draft, or a post waiting for approval with its request                                                          | Draft or Publish |
-| `schedule-post`         | Schedules a draft at a time or the next free posting time; becomes an approval request where the workspace asks           | Publish          |
-| `publish-now`           | Publishes a draft or a scheduled post now, on every account it goes to; it can't be undone                                | Publish          |
-| `reschedule-post`       | Moves a scheduled post, or one waiting for approval, to a new time                                                        | Publish          |
+| `restore-draft`         | Brings back a draft deleted in the last 30 days, as a draft                                                               | Draft or Publish |
+| `schedule-post`         | Schedules a draft at a time or the next free posting time, 5 minutes ahead at the earliest; may wait for approval         | Publish          |
+| `publish-now`           | Publishes a draft or a scheduled post on every account, 5 minutes ahead so you can still stop it; can't be undone         | Publish          |
+| `reschedule-post`       | Moves a scheduled post, or one waiting for approval, to a new time, 5 minutes ahead at the earliest                       | Publish          |
 | `unschedule-post`       | Takes a scheduled post, or one waiting for approval, back to the drafts                                                   | Publish          |
 | `retry-post`            | Sends a failed post again to one account where it failed, fixing its files first when needed                              | Publish          |
 | `edit-published-post`   | Edits a post that already went out, on one of its accounts, where the network allows edits                                | Publish          |
