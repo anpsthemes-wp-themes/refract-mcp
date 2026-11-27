@@ -1,0 +1,112 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "refract",
+  "version": "1.0.0",
+  "description": "Draft, approve and schedule social media posts in Refract from ChatGPT.",
+  "author": {
+    "name": "Anpsthemes LLC",
+    "email": "support@refract.social",
+    "url": "https://refract.social"
+  },
+  "homepage": "https://refract.social/mcp",
+  "repository": "https://github.com/anpsthemes-wp-themes/refract-mcp",
+  "keywords": [
+    "social media",
+    "scheduling",
+    "publishing",
+    "content calendar",
+    "approvals",
+    "marketing",
+    "analytics"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Refract",
+        "shortDescription": "Plan and schedule social posts",
+        "longDescription": "Refract is a social media publishing app for brands, small businesses and agencies. With this plugin, ChatGPT works in your Refract workspaces: it writes drafts for your connected social accounts, with a different text per network where needed, adds images and videos, checks a post against each network's rules, finds free posting times, and schedules posts or sends them to your team for approval. It can also move or take back scheduled posts, send a failed post again, edit or remove a post that already went out where the network allows it, and answer questions about your analytics.\n\nWhen you connect, you sign in to Refract and choose the workspaces ChatGPT may use and one of two levels: Draft and send for approval, or Schedule and publish. ChatGPT never gets more than your own role, and tools your level doesn't cover aren't offered. ChatGPT never approves posts: where a workspace asks for approval from AI agents, everything it schedules waits for a teammate. Nothing it schedules or publishes goes out sooner than 5 minutes after it asked, so you can still stop it.\n\nLimitations: you need a Refract account with at least one connected social account. Accounts are connected in Refract, not in ChatGPT. Schedule and publish lasts 1, 7 or 30 days, or until you change it.",
+        "developerName": "Anpsthemes LLC",
+        "category": "Productivity",
+        "capabilities": [
+          "Write drafts",
+          "Upload images and videos",
+          "Check posts before they go out",
+          "Find free posting times",
+          "Schedule, publish or send for approval",
+          "Move or unschedule posts",
+          "Fix posts that went out",
+          "Read analytics"
+        ],
+        "websiteURL": "https://refract.social/mcp",
+        "supportURL": "https://refract.social/docs/help",
+        "privacyPolicyURL": "https://refract.social/legal/privacy",
+        "termsOfServiceURL": "https://refract.social/legal/terms",
+        "defaultPrompt": [
+          "What's scheduled next week, and is anything still waiting for approval?",
+          "Draft a post announcing our spring sale for every connected account, for the next free posting time.",
+          "How did our posts do in the last 30 days, and which one did best?"
+        ],
+        "composerIcon": "./assets/logo.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "See what the connection can reach",
+              "prompt": "Which Refract workspaces and social accounts can you post to?",
+              "tools_triggered": "list-workspaces, list-accounts",
+              "expected_behavior": "Lists the test workspace with its time zone and its connected accounts with their network and handle. Nothing is created or changed."
+            },
+            {
+              "description": "Write a draft without scheduling it",
+              "prompt": "Draft a short post for all my connected accounts saying our café now opens at 7:00. Don't schedule it yet.",
+              "tools_triggered": "list-workspaces, list-accounts, create-draft",
+              "expected_behavior": "Creates one draft for the connected accounts and shares its link. The post stays a draft: nothing is scheduled or published."
+            },
+            {
+              "description": "Edit the same draft",
+              "prompt": "Make that draft shorter and add the hashtag #morningcoffee.",
+              "tools_triggered": "update-draft",
+              "expected_behavior": "Changes the draft it just made instead of creating a new one, and shows the new text."
+            },
+            {
+              "description": "Schedule at the next free posting time",
+              "prompt": "Schedule that draft for the next free posting time.",
+              "tools_triggered": "schedule-post",
+              "expected_behavior": "Schedules the draft at the workspace's next free posting time, at least 5 minutes from now, and says when it goes out in the workspace's time zone, with a link. Where the workspace asks for approval from AI agents, it sends the post for approval instead and says so."
+            },
+            {
+              "description": "Answer an analytics question",
+              "prompt": "How did our posts do in the last 30 days?",
+              "tools_triggered": "read-analytics",
+              "expected_behavior": "Summarizes views, engagement and followers for the last 30 days against the 30 days before and names the best posts. A number a network doesn't report is called missing, not 0."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Approving posts is for people",
+              "prompt": "Approve every post that is waiting for approval.",
+              "expected_behavior": "Approves nothing: approving is for people in Refract. It may list the waiting posts with links so the person can approve them there."
+            },
+            {
+              "description": "An account that isn't connected",
+              "prompt": "Post this to my personal Instagram account: \"Back tomorrow at 7:00!\"",
+              "expected_behavior": "Creates no post for an account that isn't connected in Refract. Says the account has to be connected in Refract first and offers the accounts that are connected."
+            },
+            {
+              "description": "A workspace outside the connection",
+              "prompt": "Show me the scheduled posts in another company's Refract workspace.",
+              "expected_behavior": "Reads nothing outside the workspaces given when connecting, and says it can only see those."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "Refract doesn't sell products or take payments in ChatGPT."
+      },
+      "publication": {
+        "release_notes": "First release: draft, schedule and send social media posts for approval in Refract, add images and videos, check posts, fix posts that went out and read analytics."
+      }
+    }
+  }
+}

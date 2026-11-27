@@ -27,7 +27,9 @@
       },
       "annotations": {
         "title": "List Workspaces",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -48,7 +50,9 @@
       },
       "annotations": {
         "title": "List Accounts",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -97,7 +101,9 @@
       },
       "annotations": {
         "title": "List Posts",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -124,7 +130,9 @@
       },
       "annotations": {
         "title": "Get Post",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -151,7 +159,9 @@
       },
       "annotations": {
         "title": "Check Post",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -226,7 +236,9 @@
       },
       "annotations": {
         "title": "Read Analytics",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -265,7 +277,9 @@
       },
       "annotations": {
         "title": "Find Slots",
-        "readOnlyHint": true
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -310,7 +324,9 @@
       },
       "annotations": {
         "title": "Create Draft",
-        "destructiveHint": false
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -359,7 +375,9 @@
       },
       "annotations": {
         "title": "Update Draft",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false
       }
     },
     {
@@ -412,7 +430,9 @@
       },
       "annotations": {
         "title": "Upload Media",
-        "destructiveHint": false
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "openWorldHint": true
       }
     },
     {
@@ -433,7 +453,9 @@
       },
       "annotations": {
         "title": "Request Media Upload",
-        "destructiveHint": false
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -464,7 +486,9 @@
       },
       "annotations": {
         "title": "Send For Approval",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false
       }
     },
     {
@@ -495,7 +519,9 @@
       },
       "annotations": {
         "title": "Schedule Post",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
       }
     },
     {
@@ -522,7 +548,9 @@
       },
       "annotations": {
         "title": "Publish Now",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
       }
     },
     {
@@ -554,7 +582,9 @@
       },
       "annotations": {
         "title": "Reschedule Post",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
       }
     },
     {
@@ -581,7 +611,9 @@
       },
       "annotations": {
         "title": "Unschedule Post",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false
       }
     },
     {
@@ -608,7 +640,9 @@
       },
       "annotations": {
         "title": "Delete Draft",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false
       }
     },
     {
@@ -635,7 +669,9 @@
       },
       "annotations": {
         "title": "Restore Draft",
-        "destructiveHint": false
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "openWorldHint": false
       }
     },
     {
@@ -680,7 +716,9 @@
       },
       "annotations": {
         "title": "Edit Published Post",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
       }
     },
     {
@@ -713,7 +751,9 @@
       },
       "annotations": {
         "title": "Remove Published Post",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
       }
     },
     {
@@ -746,7 +786,9 @@
       },
       "annotations": {
         "title": "Retry Post",
-        "destructiveHint": true
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
       }
     }
   ],
